@@ -1,0 +1,16 @@
+{
+  "name": "@api2ts/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "api2ts": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@anthropic-ai/bedrock-sdk": "^0.12.0",
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}
