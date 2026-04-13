@@ -6,13 +6,24 @@ import { followLinks } from "./tools/follow-links.js";
 
 const server = new McpServer({ name: "fetcher-mcp", version: "0.1.0" });
 
-server.registerTool("fetch_page", { inputSchema: { url: z.string() } }, async ({ url }) => ({
-  content: [{ type: "text", text: await fetchPage(url) }],
-}));
+server.registerTool(
+  "fetch_page",
+  { 
+    description: "Fetch the raw HTML of a page at the given URL.",
+    inputSchema: { url: z.string() } 
+  },
+  
+  async ({ url }) => ({
+    content: [{ type: "text", text: await fetchPage(url) }],
+  })
+);
 
 server.registerTool(
   "follow_links",
-  { inputSchema: { url: z.string(), selector: z.string().optional() } },
+  {
+    description: "Return all links found on a page. Optionally scope to a CSS selector.",
+    inputSchema: { url: z.string(), selector: z.string().optional() },
+  },
   async ({ url, selector }) => ({
     content: [{ type: "text", text: JSON.stringify(await followLinks(url, selector)) }],
   })
