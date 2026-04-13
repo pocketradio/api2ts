@@ -2,6 +2,7 @@ import AnthropicBedrock from "@anthropic-ai/bedrock-sdk";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Tool, MessageParam, ToolResultBlockParam } from "@anthropic-ai/sdk/resources/messages";
 import type { McpClientManager } from "./mcp-client.js";
+import { buildSystemPrompt } from "./prompts.js";
 
 export type AgentOptions = {
   url: string;
@@ -37,7 +38,7 @@ export async function runAgent(options: AgentOptions, mcp: McpClientManager): Pr
     const response = await client.messages.create({
       model: "us.anthropic.claude-sonnet-4-20250514-v1:0",
       max_tokens: 4096,
-      system: "You are api2ts, a tool that reverse engineers APIs. Use the available tools to crawl documentation, extract endpoints, and generate typed TypeScript clients.",
+      system: buildSystemPrompt(),
       tools: allTools,
       messages,
     });
