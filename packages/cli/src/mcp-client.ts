@@ -1,6 +1,6 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-
+import {Tool} from "@anthropic-ai/sdk/resources/messages"
 export type ServerConfig = {
   name: string; // like fetcher or analzyer
   command: string;
@@ -27,11 +27,21 @@ export class McpClientManager {
     return result;
   }
 
-  async listTools(serverName: string): Promise<string[]> {
+  async listTools(serverName: string): Promise<Tool[]> {
     const client = this.clients.get(serverName);
     if (!client) throw new Error(`no MCP client registered for server: ${serverName}`);
     const result = await client.listTools();
-    return result.tools.map((t) => t.name);
+
+    // returning array of Tool(s) instead of strings.
+    return result.tools.map((t) =>({
+      name : t.name,
+      description : t.description,
+      input_schema : t.inputSchema
+    }))
+
+
+    
+    // return result.tools.map((t) => t.name);
   }
 
   async disconnect(): Promise<void> {
