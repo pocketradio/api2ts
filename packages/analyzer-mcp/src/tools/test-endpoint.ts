@@ -17,15 +17,25 @@ export async function testEndpoint(
 
   const start = Date.now()
   
-  const response = await fetch(url,{
-    method,
-    headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  })
-  const end = Date.now()
-  
-  const responseTime = end-start
 
+  try{
+    const response = await fetch(url,{
+      method,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    })
+    const end = Date.now()
+    const responseTime = end-start
 
-  return { method, url, status: response.status , responseTime, body : await response.text()};
+    return { method, url, status: response.status , responseTime, body : await response.text()};
+    
+  }
+  catch(err){
+
+    const error = err instanceof Error ? err.message : String(err) 
+    return { method, url, status: 0 , responseTime : 0 , body : "", 
+      error
+    };
+  }
+
 }
